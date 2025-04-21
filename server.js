@@ -32,15 +32,21 @@ if (!DB_URI || !PORT || !process.env.JWT_SECRET) {
   process.exit(1);
 }
 
-mongoose.connect(DB_URI, {})
+// Debugging: Log environment variables (remove in production)
+console.log("DB_URI:", DB_URI);
+console.log("PORT:", PORT);
+
+mongoose.connect(DB_URI, {
+  
+  serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
+})
   .then(() => {
-    console.log("Connected to MongoDB");
+    console.log("✅ Connected to MongoDB");
 
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`🚀 Server is running on port ${PORT}`);
     });
-
   })
   .catch((err) => {
-    console.error("Error connecting to MongoDB", err);
+    console.error("❌ Error connecting to MongoDB:", err.message);
   });
