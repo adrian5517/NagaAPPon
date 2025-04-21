@@ -4,40 +4,40 @@ const jwt = require('jsonwebtoken');
 
 
 const registerUser = async (req, res) => {
-    const { name, username, email, password } = req.body;
-
+    const { username, email, password } = req.body;
+  
     try {
-        // Check if email already exists
-        const existingEmail = await User.findOne({ email });
-        if (existingEmail) return res.status(400).json({ message: 'Email already exists' });
-
-        // Check if username already exists
-        const existingUsername = await User.findOne({ username });
-        if (existingUsername) return res.status(400).json({ message: 'Username already exists' });
-
-        const profilePicture = `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`;
-
-        const newUser = new User({
-            name,
-            username,
-            email,
-            password,
-            profilePicture
-        });
-
-        await newUser.save();
-
-        const token = newUser.generateAuthToken();
-
-        res.status(201).json({
-            message: 'User registered successfully',
-            token,
-            user: newUser,
-        });
+      const existingEmail = await User.findOne({ email });
+      if (existingEmail) return res.status(400).json({ message: 'Email already exists' });
+  
+      const existingUsername = await User.findOne({ username });
+      if (existingUsername) return res.status(400).json({ message: 'Username already exists' });
+  
+      const profilePicture = `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`;
+  
+      const newUser = new User({
+        username,
+        email,
+        password,
+        profilePicture,
+      });
+  
+      await newUser.save();
+      const token = newUser.generateAuthToken();
+  
+      res.status(201).json({
+        token,
+        user: {
+          _id: newUser._id,
+          username: newUser.username,
+          email: newUser.email,
+          profilePicture: newUser.profilePicture,
+        }
+      });
     } catch (error) {
-        res.status(500).json({ message: 'Error registering user', error: error.message });
+      res.status(500).json({ message: 'Error registering user', error: error.message });
     }
-};
+  };
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;

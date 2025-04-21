@@ -9,12 +9,14 @@ const PORT = process.env.PORT;
 const DB_URI = process.env.DB_URI;
 
 const authRoutes = require('./router/authRouter');
+const pickupRoutes = require('./router/pickupLocationRouter')
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/pickups', pickupRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the server!");
@@ -33,8 +35,8 @@ if (!DB_URI || !PORT || !process.env.JWT_SECRET) {
 }
 
 // Debugging: Log environment variables (remove in production)
-console.log("DB_URI:", DB_URI);
-console.log("PORT:", PORT);
+// console.log("DB_URI:", DB_URI);
+// console.log("PORT:", PORT);
 
 mongoose.connect(DB_URI, {
   
