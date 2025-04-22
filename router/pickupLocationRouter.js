@@ -5,11 +5,13 @@ const pickupController = require('../controllers/pickupLocationController');
 // Read all pickups
 router.get('/', pickupController.getAllPickups);
 
+// Read single pickup
+router.get('/:id', pickupController.getPickupById);
+
 // Get Pending Pickups 
 router.get('/pending', pickupController.getPendingPickups);
 
-// Read single pickup
-router.get('/:id', pickupController.getPickupById);
+
 
 // Create new pickup
 router.post('/', pickupController.createPickup);
